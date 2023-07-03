@@ -100,8 +100,8 @@ class FileStorage():
         deletes obj from __objects if it is inside
         if obj is equal to None, the method should not do anything
         """
-
         if obj is not None:
-            key = obj.__class__.__name__ + '.' + obj.id
-            if key in self.__objects:
-                self.__objects.pop(key)
+            for k, v in self.__objects.items():
+                if v is obj:
+                    break
+            self.__objects.pop(k)
