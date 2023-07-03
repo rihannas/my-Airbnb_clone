@@ -13,13 +13,24 @@ from models.amenity import Amenity
 
 
 class FileStorage():
+    """
+    a class FileStorage that serializes instances to a JSON file and deserializes JSON file to instances
+    """
     # privare class attributes
     __file_path = 'file.json'
     __objects = {}
 
     # public instance methods
-    def all(self):
+    def all(self, cls=None):
         '''returns the dictionary __objects'''
+        if cls:
+            oneclassObjects = {}
+            for key, value in FileStorage.__objects.items():
+                valueClass = value.__class__
+                if cls == valueClass:
+                    oneclassObjects[key] = value
+
+            return oneclassObjects
         return self.__objects
 
     def new(self, obj):
@@ -83,3 +94,14 @@ class FileStorage():
 
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """
+        deletes obj from __objects if it is inside
+        if obj is equal to None, the method should not do anything
+        """
+
+        if obj is not None:
+            key = obj.__class__.__name__ + '.' + obj.id
+            if key in self.__objects:
+                self.__objects.pop(key)
