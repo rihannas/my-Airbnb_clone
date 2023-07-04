@@ -1,10 +1,19 @@
 #!/usr/bin/python3
 from uuid import uuid4
 from datetime import datetime
+from sqlalchemy import Column, String, DateTime
+from sqlalchemy.ext.declarative import declarative_base
 
+Base = declarative_base()
 
 #  class BaseModel that defines all common attributes/methods for other classes:
+
+
 class BaseModel():
+    """Base class for all models"""
+    id = Column(String(60), nullable=False, primary_key=True)
+    created_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
 
     def __init__(self, *args, **kwargs):
         # if kwargs is not empty
