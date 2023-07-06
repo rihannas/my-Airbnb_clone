@@ -36,19 +36,19 @@ class BaseModel():
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            from models import storage
-            storage.new(self)
 
     # magic method which represents a class object as str
+
     def __str__(self):
         return f'[{self.__class__.__name__}] ({self.id}) {self.__dict__}'
 
     # public methods
 
     def save(self):
-        from models import storage
         # updates updated_at with current datetime.
         self.updated_at = datetime.now()
+        from models import storage
+        storage.new(self)
         storage.save()
 
     def to_dict(self):
@@ -64,5 +64,16 @@ class BaseModel():
         dic['__class__'] = self.__class__.__name__
         dic['created_at'] = self.created_at.isoformat()
         dic['updated_at'] = self.updated_at.isoformat()
+        key = "_sa_instance_state"
+
+        if key in dic.keys():
+            del dic[key]
 
         return dic
+
+    def delete(self):
+        """
+        deletes the current instance from storage
+        """
+        from models import storage
+        storage.delete(self)
